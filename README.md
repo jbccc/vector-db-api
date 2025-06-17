@@ -15,22 +15,26 @@
    make build  # or: docker-compose build
    ```
 
-2. **Start the application**:
+2. **Put your Cohere API key**:
+
+* In app/config.py, under `COHERE_API_KEY`.
+
+3. **Start the application**:
    ```bash
    make up     # or: docker-compose up -d
    ```
 
-3. **Completely empty the database**:
+4. **Completely empty the database**:
    ```bash
    make reset-db  # or: docker exec -it stackai-api python scripts/reset_db.py
    ```
 
-4. **Populate the database with sample data**
+5. **Populate the database with sample data**
    ```bash
    make populate-db
    ```
 
-5. **Access the API**:
+6. **Access the API**:
    - API: http://localhost:8000
    - PostgreSQL: localhost:5432
 

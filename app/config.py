@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     LSH_NUM_HYPERPLANES: int = 10
 
     # Cohere Configuration
-    COHERE_API_KEY: str | None = "nGccwptQNrRyeoLc6Hs0NnLtcdU2zQ7drJvjRdza"
+    COHERE_API_KEY: str | None = "put_your_cohere_api_key_here"
     COHERE_MODEL: str = "embed-v4.0"
     COHERE_INPUT_TYPE: str = "search_query"
 
@@ -95,26 +95,6 @@ class Settings(BaseSettings):
             msg = f"VECTOR_INDEX_TYPE must be one of: {allowed_types}"
             raise ValueError(msg)
         return v.lower()
-
-    @field_validator("COHERE_API_KEY")
-    @classmethod
-    def validate_cohere_api_key(cls, v: str | None) -> str:
-        """Validate that Cohere API key is provided."""
-        if v is None or v.strip() == "":
-            msg = (
-                "COHERE_API_KEY must be provided in environment variables or .env file"
-            )
-            raise ValueError(msg)
-        return v.strip()
-
-    @field_validator("SECRET_KEY")
-    @classmethod
-    def validate_secret_key(cls, v: str | None) -> str:
-        """Validate that Secret key is provided."""
-        if v is None or v.strip() == "":
-            msg = "SECRET_KEY must be provided in environment variables or .env file"
-            raise ValueError(msg)
-        return v.strip()
 
     @property
     def is_development(self) -> bool:

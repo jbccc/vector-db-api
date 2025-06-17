@@ -31,7 +31,6 @@ services:
       - DATABASE_NAME=rag_db_test
       - DATABASE_PORT=5432
       - ENVIRONMENT=testing
-      - COHERE_API_KEY=${COHERE_API_KEY}
     command: ["pytest", "-v", "tests/"]
 
 volumes:
