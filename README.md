@@ -1,4 +1,4 @@
-# StackAI - Take-at-Home Task - Backend
+# Vector Database API
 
 ## Quick Start
 
