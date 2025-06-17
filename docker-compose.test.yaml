@@ -1,0 +1,39 @@
+services:
+  db-test:
+    image: postgres:15
+    container_name: rag-db-test
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=rag_db_test
+    ports:
+      - "5433:5432" # Expose on a different port to avoid conflicts with dev db
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: rag-api-test
+    depends_on:
+      db-test:
+        condition: service_healthy
+    environment:
+      - DATABASE_HOST=db-test
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=rag_db_test
+      - DATABASE_PORT=5432
+      - ENVIRONMENT=testing
+      - COHERE_API_KEY=${COHERE_API_KEY}
+    command: ["pytest", "-v", "tests/"]
+
+volumes:
+  postgres_data_test:
+    driver: local 

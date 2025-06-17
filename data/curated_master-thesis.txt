@@ -1,0 +1,449 @@
+To Explain or to Predict? Shmueli2010
+Since the emergence of early statistical frameworks, our comprehension of data has advanced dramatically. From basic correlation analysis of empirical observations graunt1662natural and progressing to sophisticated modeling of complete languages brown2020language and biological structures jumper2021highly, Artificial Intelligence (AI) systems have developed to support virtually all domains of human endeavor. They have also evolved from highly interpretable systems, where we can understand the role of the few variables in the prediction model, to so-called black-box models, where the individual contribution of each datapoint is submerged in the billions of parameters that contribute to the model. indeed, as the prediction became more accurate, the size and complexity of all models grew accordingly, as shown in Figure , trading off interpretability for predictive capability.
+
+However, recent research regarding neural networks (NNs), the most powerful black-box methods, interpretability has demonstrated interesting capabilities that in no way impute model accuracy. These methods are based on the activation of neurons, in the same way as we observe a human brain. Using techniques and data sets, it is possible to associate certain parts of a NN with a behavior, a computation or a concept. It has thus become possible to know, e.g. when a language model talks about politics kim2025linear, without interfering with the capabilities of the model in question.
+
+This Master's thesis therefore bears the following research questions: Is it possible to transpose NN interpretability techniques to bio-statistics, and how effective these new techniques become?
+
+Biology is the broad study of living things, from cells to evolution, disease and the effect of molecules on the human body. The latter is of particular interest to us, as it is one of the main applications of bio-statistics, the sub-branch of statistics that applies statistical methods to the study of living organisms. It's relatively easy to collect information, i.e. about patients and to record and study the effects of, say, drugs on them. This is called experimentation, and produces a statistically analyzable data set. Today, this process, when optimized, is akin to our clinical trials: a set of patients selected to take part in a study on the effect of a drug. The aim is to discover whether the observed effect is absolutely attributable to the drug, and whether there are no undesirable side-effects.
+
+However, clinical trials face many limitations. Primarily, the costs per patient are enormous, as shown in figure . In the US, costs average \60k per patient for rarer diseases such as cancer, according to Battelle2015. Therefore, reducing the number of patient is a priority. Another component is the number of visit each patient is supposed to make. Indeed, the more interventions, the more expensive the study is per patient. The financial burden intensifies when a patient withdraws from a study, rendering all prior investments in their participation --- such as recruitment, screening, and monitoring --- effectively lost. This underscores the need for optimization, and by refining trial designs, we can mitigate these losses. 
+
+Optimizing clinical trials involves strategically determining the minimal sample size required to achieve statistical significance, thereby reducing costs without compromising result validity. Statistical significance assesses whether observed drug effects are genuinely attributable to the treatment rather than random chance. This evaluation typically employs hypothesis testing, where the null hypothesis (no effect) is compared against an alternative hypothesis (presence of an effect). Trials must carefully balance two critical statistical parameters: \(\), often set at 0.05, representing the probability of incorrectly rejecting a true null hypothesis (Type I error) ; and , usually targeted at 80\
+By selecting appropriate statistical tests and precisely calculating the minimum necessary sample size to meet these criteria, trials can avoid unnecessary patient recruitment, thus significantly lowering costs while maintaining scientific rigor.
+
+Establishing causality is a cornerstone of clinical trials, as the goal is to confirm that the drug directly causes the observed effect, not merely that the two are associated. Randomized controlled trials (RCTs) are the gold standard for this, as randomization ensures that treatment and control groups are comparable, isolating the drug's effect. However, challenges such as confounding variables (e.g., age or lifestyle factors) or patient non-compliance can obscure causal relationships. Optimization strategies include stratified randomization, which balances known confounders across groups, and intention-to-treat analysis, which preserves the benefits of randomization by including all patients as originally assigned, regardless of adherence. These methods enhance the trial's ability to draw valid causal conclusions efficiently.
+
+Biases pose significant threats to the integrity of clinical trial results. For instance, selection bias occurs when the sample does not represent the target population, performance bias arises from inconsistent treatment administration, detection bias stems from unequal outcome assessment between groups, and attrition bias results from differential dropouts. To optimize trials, we can implement blinding (where patients are unaware of their group assignment) or double-blinding (where both patients and researchers are unaware), reducing performance and detection biases. For attrition bias, techniques like multiple imputation or last observation carried forward can address missing data from withdrawals madsen2015using. By minimizing these biases, trials produce more reliable results with fewer resources wasted on flawed designs.
+
+Right-censoring is a common issue in survival analysis within clinical trials, occurring when the event of interest (e.g., death, disease progression) has not occurred by the study’s end or when participants drop out. This can lead to biased estimates if not handled properly. In Prinja2010, they highlight methods such as Kaplan-Meier for estimating survival functions and Cox models Cox1972 for assessing hazard ratios, accounting for censored observations.
+
+In bio-statistics, where datasets are often high-dimensional and riddled with complex relationships, traditional statistical methods can stumble due to their dependence on rigid parametric assumptions erceg-hurn2008modern. Conversely, machine learning excels at modeling intricate patterns but often prioritizes prediction over the statistical inference anastasiadiou2023prediction required for scientific rigor. Targeted Learning (TL), pioneered by Mark van der Laan vanderLaanRubin2006, elegantly bridges this divide. By melding the adaptability of machine learning with the precision of causal inference, TL delivers robust, efficient estimates tailored to complex settings like clinical trials and observational studies—cornerstones of bio-statistical research.
+
+The TL framework unfolds in two key stages. First, it estimates the data-generating distribution using Super Learning vanderLaan2007, an ensemble technique that integrates multiple machine learning algorithms—think random forests, gradient boosting, or neural networks—into a single, optimized predictor. This step sidesteps the pitfalls of relying on a lone, potentially misspecified model, capturing the data’s complexity with flexibility. Second, TL refines this initial estimate through a targeting step, typically via Targeted Maximum Likelihood Estimation (TMLE). TMLE adjusts the estimate to zero in on the parameter of interest—say, the average treatment effect—while ensuring statistical properties like efficiency and minimal bias. The outcome? An estimator that adapts to the data yet yields valid confidence intervals and hypothesis tests, vital for bio-statistical conclusions.
+
+TL shines in bio-statistics for its ability to tackle high-dimensional data—like patient records with dozens of covariates—without choking on restrictive assumptions. It offers efficient estimates, potentially shrinking the sample sizes needed for reliable results, and supports robust inference, making it a game-changer for clinical research. Its applications are broad: TL has been used to estimate treatment effects in randomized trials, dissect longitudinal data with time-varying interventions, and craft individualized treatment rules in precision medicine. Imagine tailoring therapies to patient profiles or decoding the impact of a drug across diverse populations—TL makes it possible with precision and confidence.
+
+Interpretability in AI refers to the ability to understand and explain how a model arrives at its predictions or decisions. This is essential for building trust in AI systems, debugging potential issues, and ensuring fairness and accountability in their applications. Different types of models exhibit varying levels of interpretability. Simpler models, such as linear regression or decision trees, are inherently more transparent—their decision-making can be traced through coefficients or tree paths. However, more complex models, like neural networks, often function as "black boxes," where the intricate interplay of numerous parameters obscures the reasoning behind their outputs, posing challenges for comprehension across a wide range of AI applications.
+
+In deep learning, interpretability becomes particularly difficult due to the models' complexity, characterized by multiple layers and millions of parameters. To address this, researchers have developed techniques like feature visualization, which reveals patterns the network detects, circuit tracing, which highlight influential input regions, and attention mechanisms, which show where the model focuses, especially in tasks like natural language processing. While these methods offer valuable insights into specific aspects of a deep learning model's behavior, they often fall short of providing a complete picture. The scale of these models and their non-linear nature mean that fully elucidating their decision processes remains a major hurdle, limiting our ability to interpret them comprehensively.
+
+At present, interpretability methods can highlight key features of predictions and provide explanations for individual results, making it easier to validate models or analyse errors. However, they struggle to provide comprehensive explanations that encompass the general behaviour of a model or to ensure that explanations accurately reflect the underlying processes. In the future, advances could lead to more robust techniques and a deeper understanding of complex systems. It is also possible to design intrinsically interpretable models that do not compromise performance, combining transparency and capacity. As AI evolves, improving interpretability will be essential for its ethical and effective use in a variety of domains.
+
+I wanted to end this introduction with a note about AI safety, the branch of AI research dedicated to ensuring safe outcomes from the training of powerful AI models.
+
+The current understanding of AI models is still extremely limited. The entire field of MI is focused on mitigating the risks associated with the emergence of highly intelligent systems. Recent studies by major LLM research laboratories Marks2023 found that LLMs can behave in dangerous ways. And with increasingly more capable systems being currently trained and deployed, we have never been so unsure about the security of our future.
+
+This research is thus part of a drive to advance AI Safety, by studying the impact of MI in other adjoining fields. This can have the dual effect of first improving bio-statistics models, as demonstrated in the present paper. But also to improve MI methods, by bringing in new ideas, specific to bio-statistics and the functioning of the human body, but transferable to other fields. I hope this will inspire fellow researchers in this quest to maximize our understandings of AI systems.
+
+Neural networks are the central concept behind Deep Learning and the automated learning of patterns and features from data. These artificial networks, inspired by the structure and function of biological neural network in animal brains, consist of interconnected nodes or artificial neurons that process and transmit information. 
+
+Neural networks can vary in structure depending on the task. Multi-Layer perceptrons consist of fully connected layers, but other architectures like Convolutional Neural Networks are better for images, capturing spatial patterns, while Recurrent Neural Networks suit sequential data like text. The number of layers and neurons, along with activation functions like ReLU, are chosen to model complexity. For outputs, regression uses linear activations, binary classification uses sigmoid, and multi-class uses softmax.
+
+This chapter builds up knowledge on how to define, train and use this kind of machine learning techniques, exploring different models, neural network architectures and concepts.
+
+This chapter introduces fundamental concepts and techniques in Machine Learning (ML), laying the groundwork for understanding both classical methods and the more complex Neural Networks (NNs) architectures discussed subsequently, and which correspond to the deep learning subset of ML. ML algorithms enable systems to learn patterns, make predictions, or uncover structures within data without explicit programming for each specific task.
+
+A primary distinction within ML is between and learning. In supervised learning, the algorithm is trained on a dataset consisting of input-output pairs, denoted as , where is the input feature vector and is the corresponding target label or value. The goal is to learn a mapping function that can accurately predict the output for new, unseen inputs . Common supervised tasks include , where is a continuous value, and , where belongs to a discrete set of categories.
+
+In contrast, unsupervised learning deals with datasets containing only input data, , without corresponding target outputs. The objective here is to discover inherent structures or patterns within the data, such as grouping similar data points () or reducing the dimensionality of the feature space while preserving essential information ().
+
+Effective ML model development hinges on proper data handling and evaluation strategies to ensure models generalize well to unseen data.
+
+Typically, the available data is partitioned into distinct sets. The is used to learn the model parameters (e.g., weights in a NN or coefficients in a linear model) by optimizing a specific objective. This optimization usually involves minimizing a , , which quantifies the discrepancy between the model's predictions and the true targets .
+
+The plays a crucial role during the training phase. It is used to tune – parameters not learned directly from the training data, such as the learning rate in gradient descent, the depth of a decision tree, or the strength of a regularization penalty. Crucially, the validation set provides an estimate of the model's performance on data it hasn't been trained on, which helps in identifying and preventing . Overfitting occurs when a model learns the training data too well, capturing noise and specific idiosyncrasies, leading to poor performance on new, unseen data. Monitoring performance on the validation set allows for strategies like early stopping, where training is halted when validation performance begins to degrade.
+
+Finally, the is held out completely until the model development process (including training and hyperparameter tuning) is finished. It provides the final, unbiased estimate of the model's generalization performance on completely new data, simulating how the model would perform in a real-world deployment.
+
+To obtain more robust performance estimates and make better use of limited data, particularly when the initial dataset is not very large, (CV) is a widely employed technique. A common approach is . In this method, the original training data is randomly partitioned into equal-sized folds (subsets). The model is then trained and evaluated times. In each iteration (from to ), the -th fold is held out as a temporary validation set, and the model is trained on the remaining folds. The performance metric (e.g., accuracy, mean squared error) is calculated on the held-out fold. After iterations, the performance metrics are averaged across all folds to provide a more stable and reliable estimate of the model's performance than a single train-validation split. This averaged performance is often used to guide hyperparameter selection or compare different model types.
+
+Before delving into the intricacies of NN, it is instructive to review some fundamental models of supervised learning. These methods are widely used, particularly in fields such as biostatistics, where interpretability and efficiency on smaller, structured datasets are often crucial.
+
+ is the basis for modelling the relationship between a continuous target variable and a set of input characteristics . It assumes a linear relationship:
+\[ Y = _0 + _1 X_1 + + _p X_p + = X + \]
+where is the vector of coefficients (including an intercept term ), is the design matrix (including a column of ones for the intercept), and represents the error term, typically assumed to follow a normal distribution . The coefficients are most commonly estimated using , which minimizes the Residual Sum of Squares (RSS):
+\[ _OLS = _ ||y - X||_2^2 = _ _i=1^n (y_i - x_i^T)^2 \]
+The OLS solution has a closed form: , provided is invertible.
+
+ extend the linear regression framework to account for response variables with non-normal error distribution patterns, and for dependent variables whose relationship with the predictors is non-linear. A GLM is defined by a probability distribution from the exponential family (e.g. Bernoulli, Poisson, Gamma) and a such that .
+
+ is a specific, widely used GLM designed for binary classification problems, where the response variable takes values in . It models the probability of the positive class, , using the (or log-odds) link function:
+\[ g(p(X)) = (p(X)1-p(X)) = X \]
+Equivalently, the probability is modeled via the sigmoid (or logistic/expit) function:
+\[ p(X) = e^X1 + e^X = 11 + e^-X \]
+The parameters are typically estimated using . Given independent observations , the log-likelihood function for Bernoulli outcomes is:
+\[ () = _i=1^n [y_i (p(x_i)) + (1-y_i)(1-p(x_i))] \]
+Maximizing , or minimizing its negative, the binary cross-entropy (BCE) loss, yields the parameter estimates . Unlike linear regression, there is generally no closed-form solution, and iterative methods like gradient ascent are used.
+
+In scenarios where the number of predictors is large, potentially even larger than the number of observations , standard OLS or MLE can lead to unstable estimates and poor predictive performance due to high variance or overfitting. methods address this by adding a penalty term to the objective function, encouraging simpler models by shrinking the coefficient estimates towards zero.
+
+The Tibshirani1996 adds an penalty to the OLS objective (for linear regression) or the negative log-likelihood (for logistic regression). For linear regression, the LASSO estimate is:
+\[ _LASSO = _ ( ||y - X||_2^2 + ||||_1 ) \]
+where is the norm of the coefficient vector (excluding the intercept), and is a tuning parameter controlling the amount of shrinkage. As increases, more coefficients are forced to be exactly zero. This property makes LASSO perform simultaneous coefficient shrinkage and automatic feature selection, leading to potentially more interpretable and sparse models. The optimal is typically chosen using cross-validation. Ridge regression, another popular technique, uses an penalty () which shrinks coefficients but rarely sets them exactly to zero .
+
+While individual models like linear regression or decision trees can be effective, zhou2012ensemble often achieve superior performance and robustness by strategically combining the predictions of multiple models, known as base learners. The core principle is that by aggregating the "wisdom" of several diverse models, the weaknesses or biases of individual learners can be averaged out, leading to a stronger, more reliable overall prediction. Different ensemble techniques employ various strategies for creating diversity among the base learners and for combining their outputs. Two highly influential and powerful ensemble paradigms are Random Forests and Gradient Boosting Machines.
+
+ breiman2001random represent a prominent ensemble technique primarily utilizing decision trees as base learners. Instead of relying on a single, potentially complex decision tree which might overfit the training data, a random forest constructs a large collection (a "forest") of decision trees during training. The final prediction is then determined by aggregating the outputs of all trees in the forest: for regression tasks, this typically involves averaging the predictions, while for classification, a majority vote among the trees determines the final class label. The key to the effectiveness of random forests lies in the introduction of randomness during the tree-building process, which ensures diversity among the individual trees and reduces correlation between them. This randomness is incorporated through two primary mechanisms. First, , or bootstrap aggregating, is employed, meaning each individual tree is trained on a different bootstrap sample drawn with replacement from the original training dataset. Consequently, each tree learns from a slightly different perspective of the data. Second, when determining the best split at each node within a tree, only a random subset of the total available features is considered as candidates. This method prevents a few dominant features from overly influencing all trees in the forest, further promoting diversity. By averaging the predictions of these numerous, largely uncorrelated trees, random forests significantly reduce the variance compared to single decision trees, leading to improved generalization and robustness against overfitting, even with high-dimensional data.
+
+ FreundSchapire1997,friedman2001greedy constitute another powerful class of ensemble methods, but unlike the parallel construction of trees in random forests, GBMs build the ensemble sequentially. An initial simple model (e.g., predicting the mean) is established, and subsequent models (typically decision trees) are added iteratively. Each new tree is specifically trained to predict and correct the errors, specifically the residuals or, more generally, the negative gradient of a chosen loss function, made by the current ensemble of preceding models. The predictions of all models in the sequence are then combined, usually as a weighted sum, to form the final prediction. This sequential, error-correcting approach allows boosting models to achieve very high accuracy by incrementally focusing on the harder-to-predict instances.
+
+ xgboost stands out as a highly optimized and regularized implementation of the gradient boosting concept, addressing some limitations of traditional GBMs and achieving state-of-the-art results on many structured data problems. It enhances the standard gradient boosting framework through several key innovations. Crucially, it incorporates directly into the objective function being optimized during tree construction, including both L1 (LASSO-like) and L2 (Ridge-like) penalties on the leaf weights (the prediction values at the terminal nodes of the trees). This regularization helps to control model complexity and prevent overfitting. Furthermore, XGBoost provides sophisticated , implementing an internal routine that learns the optimal direction (left or right child node) to send instances with missing values during the splitting process, rather than requiring pre-imputation.
+
+Feed Forward Networks (FFNs) are the most common category of NNs. They consist of successive (hidden) layers through which the information flows, meaning it cannot go backwards.
+
+The Multi-Layer Perceptron (MLP) represents a foundational architecture in the study of FFN, serving as a fully connected model capable of learning complex, nonlinear relationships from data. Building on the extension of the perceptron, the MLP addresses its predecessor's limitations by introducing multiple layers of interconnected nodes, or neurons, organized into an input layer, one or more hidden layers, and an output layer. This hierarchical structure enables the MLP to approximate arbitrary continuous functions, a property formalized by the Universal Approximation Theorem (Cybenko1989ApproximationBS; Hornik1989Universalapprox).
+
+From the fully connectedness of MLP, other architecture emerged, allowing for complex data relation and structures. The notion of FFN opposes the notion of within networks, such as Recurrent Neural Networks (RNNs), where information can flow backward through the network, allowing the model to maintain internal states and process sequential or time-dependent data (cf. Section ).
+
+The perceptron, introduced by rosenblatt1958perceptron, serves as the historical and conceptual precursor of modern NNs, embodying a simplified model of a neuron (cf. ) with a binary output. It operates on the same principle of computing a weighted sum of inputs, followed by a threshold-based decision rule. Formally, given an input vector , weight vector , and bias , the perceptron’s output is defined as:
+y = cases
+1 & if w^T x + b 0, \\
+0 & otherwise,
+cases
+
+where the activation function is implicitly a step function, , with denoting the Heaviside step function ( if , else ). Geometrically, the perceptron implements a linear decision boundary in the input space, partitioning it into two regions separated by the hyperplane . The weights determine the orientation of this hyperplane, while the bias adjusts its position relative to the origin.
+
+The perceptron learning algorithm, a seminal contribution by rosenblatt1958perceptron, iteratively updates the weights and bias to minimize classification errors on a training set. For a misclassified sample , where is the target label and \(y\) is the predicted output, the update rule is:
+w w + (t - y)x,
+b b + (t - y),
+where is the learning rate. This rule adjusts the weights in the direction of the gradient of a simple error function, converging to a solution when the data is linearly separable minsky_papert_1969. However, Minsky and Papert’s critique highlighted the perceptron’s fundamental limitation: its inability to model nonlinear relationships, such as the XOR function, due to its reliance on a single linear boundary.
+
+The MLP overcomes this constraint by stacking multiple layers of perceptron-like units with nonlinear activation functions. For a network with layers, the output of the -th layer, , is computed recursively from the previous layer’s output 
+z^(l) = W^(l)a^(l-1) + b^(l),
+a^(l)=(z^(l)),
+
+where is the weight matrix connecting layer to layer , is the bias vector, and is applied element-wise. The input layer is denoted , and the output layer produces the final prediction. This layered composition enables the MLP to construct hierarchical feature representations, a property central to its success in tasks ranging from classification to regression.
+
+The neuron constitutes the elementary computational unit of any NN, drawing inspiration from biological neural systems while abstracting their functionality into a mathematical framework. A neuron receives a vector of input signals \(x =[x_1, , x_n]^ ^n\), where \(n\) denotes the dimensionality of the input space. These inputs are modulated by a corresponding weight vector \(w =[w_1, , w_n]^ ^n\), which quantifies the strength and direction of influence each input exerts on the neuron's output. Additionally, a bias term 
+\(b\) shifts the weighted sum to adjust the neuron's activation threshold. The neuron computes a linear combination of these inputs, expressed as:
+\[z=w^x+ b = _i w_ix_i + b \]
+where \(z\) represents the pre-activation value, or , capturing the aggregated input signal.
+
+To introduce nonlinearity, a critical feature enabling NN to model complex patterns Hornik1989Universalapprox, the pre-activation \(z\) is passed through an \(:\), yielding the neuron's output:
+\[a=(z)\]
+There are two different use cases for activation functions in a NN: in the output layer, to match the task's output type and shape requirements; and in the hidden layers, to introduce nonlinearity and indicate the `' of a neuron. Most common activations function are summed up in Table .
+
+Output Layer
+Activation functions in the output layer are chosen specifically to shape the network's final pre-activation values into predictions appropriate for the given task. For instance, a sipmle , defined as \((z) = z\), has a common use case in regression problems where the target is a continuous value, as it does not restrict the output range. For binary classification tasks, the , \((z) = 11+e^-z\), is frequently employed. It maps any real-valued input to the (0, 1) interval, suitable for interpreting the output as a probability of the positive class. Sigmoid can also be applied element-wise in multi-label classification scenarios. In contrast, for multi-class classification problems with mutually exclusive classes, the is the standard choice. Applied to the entire vector \(z\) of the output layer's pre-activations, its formula \((z)_i = e^z_i_j=1^K e^z_j\) produces a probability distribution across the \(K\) classes, where outputs are positive and sum to one.
+
+Hidden Layer
+Within hidden layers, activation functions serve the crucial role of introducing nonlinearity, enabling the network to learn complex data representations and hierarchical features. The concept of a neuron `' refers to its activation \(a = (z)\) being significantly non-zero, indicating a meaningful response to its input \(z = w x_prev + b\). Several functions are used for this purpose. The \((z) = 11+e^-z\) and the \((z) = (z) = e^z - e^-ze^z + e^-z\), mapping to (0, 1) and (-1, 1) respectively, were historically common. However, their tendency to saturate and cause vanishing gradients makes them less favored in deep networks today, although Tanh's zero-centered output is sometimes advantageous. The , \((z) = (0, z)\), has become a prevalent choice for hidden layers. Its computational efficiency, non-saturating nature for positive inputs (which alleviates vanishing gradients), and tendency to induce sparse activations make it highly effective. Its clear threshold (\(z>0\) for firing) simplifies the firing interpretation. However, it can suffer from the "dying ReLU" problem where neurons cease to activate. Variants like , \((z) = ( z, z)\) for a small positive constant \(\) (e.g., 0.01), address this by allowing a small gradient for negative inputs; its common use case is as a direct alternative to ReLU. More recently, functions like the , often approximated as \((z) 0.5 z (1 + [2/ (z + 0.044715 z^3)])\), have gained prominence. GELU offers a smooth, non-monotonic approximation to ReLU and is increasingly used in advanced architectures like Transformers (cf. Section ). The choice significantly impacts training dynamics and representation quality.
+
+Interpreting this `' relative to the input data requires understanding what the neuron has learned. Through training, each hidden neuron adjusts its weights (\(w\)) and bias (\(b\)) to become sensitive to specific patterns or features within the data it receives from the preceding layer. Therefore, when a neuron `', it signals the detection of the particular feature or combination of features it is specialized to recognize. For instance, in image recognition tasks, neurons in early hidden layers might learn to fire in response to simple features like edges or specific color gradients in parts of the input image. Neurons in deeper layers receive inputs from these earlier neurons and might fire in response to more complex combinations, such as textures, shapes, or object parts. Common choices like ReLU (\((z) = (0, z)\)) exhibit a clear firing threshold (firing only when \(z>0\)), while others like Tanh or Sigmoid offer a graded response. Collectively, the activation patterns across a hidden layer form a distributed, abstract representation of the input, which is then processed by subsequent layers. Analysis of this phenomenon is the core discussion of the later Chapter .
+
+Summary Table
+
+Here is a summary of the common activation functions discussed:
+
+The process of training a Neural Network involves finding the optimal set of parameters (weights and biases, collectively denoted by \( \)) that enable the network to perform a specific supervised learning task, such as classification or regression, effectively. This is achieved by iteratively adjusting the parameters \( \) to minimize a predefined , \( L(y, y) \), which measures the discrepancy between the network's predictions \( y = f_(x) \) and the true target values \( y \). The fundamental goal is to learn a parameter set \( \) such that the network generalizes well, making accurate predictions on new, unseen data drawn from the same distribution as the training data.
+
+Training typically proceeds in , where the network processes multiple input-output examples simultaneously in each update step. This approach improves computational efficiency, leverages hardware parallelism (especially on GPUs), and often leads to more stable convergence compared to updating parameters after every single example (stochastic gradient descent) or after processing the entire dataset (batch gradient descent). The selection of appropriate batch sizes is itself a hyperparameter that can influence training dynamics and final model performance. As introduced in Section 2.1, the data is typically split into training, validation, and test sets to guide this process and evaluate the final model's generalization capability.
+
+The specific choice of the , \( L(y, y) \), is crucial as it mathematically defines the objective the network aims to minimize. This choice is primarily dictated by the nature of the task (e.g., regression vs. classification).
+
+For , where the goal is to predict continuous values, common choices include:
+itemize
+ This loss calculates the average of the squared differences between predictions and targets. It strongly penalizes large errors but can be sensitive to outliers.
+ \[
+ L_MSE() = 1n _i=1^n (y_i - y_i)^2 = 1n _i=1^n (f_(x_i) - y_i)^2
+ \]
+ This loss averages the absolute differences, making it generally less sensitive to outliers than MSE.
+ \[
+ L_MAE() = 1n _i=1^n |y_i - y_i| = 1n _i=1^n |f_(x_i) - y_i|
+ \]
+itemize
+Here, \( n \) represents the number of samples in the current batch.
+
+For , where the network predicts class probabilities, is the standard:
+itemize
+ Used for binary classification (two classes, e.g., 0 and 1), assuming the network outputs a single probability \( y_i [0, 1] \) (typically via a sigmoid activation) for the positive class.
+ \[
+ L_BCE() = -1n _i=1^n [y_i (y_i) + (1 - y_i) (1 - y_i)]
+ \]
+ It encourages \( y_i \) towards 1 when \( y_i=1 \) and towards 0 when \( y_i=0 \).
+ Employed for multi-class classification with \( C > 2 \) mutually exclusive classes. It assumes the true labels \( y_i \) are one-hot encoded vectors and the network outputs a probability distribution \( y_i \) over the \( C \) classes (typically via a softmax activation).
+ \[
+ L_CCE() = -1n _i=1^n _c=1^C y_i,c (y_i,c)
+ \]
+ where \( y_i,c \) is the predicted probability of the \( i \)-th sample belonging to class \( c \).
+itemize
+
+Beyond these standard choices, more specialized loss functions can be employed. is sometimes used in classification settings, particularly those related to maximum-margin classification ideas from SVMs. adapts the cross-entropy loss to address significant class imbalance by down-weighting the loss contribution from well-classified examples, thereby focusing training on difficult, misclassified examples (often from minority classes).
+
+Furthermore, the primary loss function is often augmented with . As mentioned in the context of LASSO (Section 2.1.3.2), these terms add a penalty based on the magnitude of the network parameters \( \) to the overall loss. Common choices are L1 regularization (\( ||||_1 \)) and L2 regularization (\( ||||_2^2 \)), where \( \) is a hyperparameter controlling the penalty strength. Regularization discourages overly complex models with excessively large parameter values, acting as a mechanism to combat overfitting and improve the model's ability to generalize. The interplay between the primary loss and regularization shapes the final learned parameters.
+
+To minimize the chosen loss function \( L() \), optimization algorithms like gradient descent require the computation of the gradient of the loss with respect to each parameter in the network, \( _ L \). Given the potentially vast number of parameters and the compositional nature of NNs (layers stacked upon layers), calculating these gradients efficiently is paramount. The provides this efficiency. It leverages the structure of the network, often visualized as a , where nodes represent variables (inputs, parameters, activations) or operations (matrix multiplication, activation functions, loss calculation) and edges represent the flow of data.
+
+The process begins with a , where an input sample (or mini-batch) \( x \) propagates through the network layer by layer, computing the pre-activations \( z^(l) \) and activations \( a^(l) \) at each layer \( l \) until the final output \( y = a^(L) \) is produced. This output is then used to compute the loss \( L(y, y) \). The computational graph implicitly stores the sequence of operations performed.
+
+Following the forward pass, the computes the gradients. Starting from the final loss value, backpropagation applies the chain rule of calculus recursively to compute the gradient of the loss with respect to the parameters at each layer, working backward from the output layer to the input layer. For instance, the gradient with respect to the weights \( W^(l) \) of layer \( l \) depends on the gradient of the loss with respect to the activations \( a^(l) \) of that layer, which in turn depends on the gradients from the subsequent layer \( l+1 \). Symbolically, the chain rule allows us to compute \( L W^(l) \) by propagating gradients backward:
+\[
+ L W^(l) = L a^(l) a^(l) z^(l) z^(l) W^(l)
+\]
+where \( a^(l) z^(l) \) involves the derivative of the activation function and \( z^(l) W^(l) \) depends on the activations from the previous layer \( a^(l-1) \). Modern deep learning frameworks automate this gradient calculation via automatic differentiation based on the constructed computational graph.
+
+Once the gradients \( _ L \) are computed for all parameters \( \), an is used to update the parameters. The simplest is , which updates parameters in the opposite direction of the gradient:
+\[
+ - _ L
+\]
+where \( \) is the , a hyperparameter controlling the step size. Various sophisticated optimizers exist (discussed in Section ) that adapt the learning rate or incorporate momentum to improve convergence speed and stability.
+
+Backpropagation, while powerful, faces challenges in very deep networks. can occur when gradients become extremely small during the backward pass (especially with saturating activation functions like sigmoid or tanh ; cf. ), effectively halting learning in earlier layers. Conversely, involve gradients growing excessively large, leading to numerical instability. Techniques like using non-saturating activations (e.g., ReLU), careful initialization, normalization layers (e.g., Batch Normalization), residual connections, and (capping the maximum magnitude of gradients) are employed to mitigate these issues. Proper tuning of the learning rate is also crucial for stable and effective training.
+
+The performance of a NN is highly sensitive not only to its learned parameters (weights and biases) but also to a set of that are chosen before the training process begins. These hyperparameters define the network's architecture and the training procedure itself. Examples include the \( \), the (number of samples processed before each parameter update), the number of hidden layers, the number of units (neurons) in each layer, the choice of , the type of optimizer used, and regularization strengths (e.g., the \( \) in L1/L2 regularization or the dropout rate).
+
+ or is the process of systematically searching for the combination of hyperparameters that yields the best performance, typically measured on the validation set. The goal is to find settings that allow the model to learn effectively from the training data while also generalizing well to unseen data. Several strategies exist for this search. involves defining a discrete set of values for each hyperparameter and evaluating the model performance for every possible combination. While exhaustive, this approach can be computationally very expensive, especially with many hyperparameters. , where hyperparameter values are sampled randomly from specified distributions or ranges, is often found to be more efficient in practice, as model performance is frequently more sensitive to some hyperparameters than others. More sophisticated methods like build a probabilistic model of the relationship between hyperparameters and performance, using past evaluations to intelligently select the next set of hyperparameters to try, aiming to find good configurations more quickly. Evaluating each hyperparameter configuration often involves on the training set, where the data is split into multiple folds, and the model is trained and evaluated multiple times, rotating which fold is used for validation. This provides a more robust estimate of performance for a given hyperparameter setting compared to a single train-validation split.
+
+A central challenge in training complex models like NNs is . This occurs when the model learns the training data too well, capturing not only the underlying patterns but also the noise and specific idiosyncrasies of the training samples. An overfitted model exhibits excellent performance on the training data but fails to generalize to new, unseen data, resulting in poor performance on the validation and test sets. It essentially memorizes the training examples rather than learning the underlying concepts.
+
+Overfitting can be detected by monitoring the model's performance on both the training and validation sets throughout the training process (as alluded to in Figure ). Typically, both training loss and validation loss will decrease initially. However, if training continues for too long, the training loss might keep decreasing while the validation loss starts to increase. This divergence is a clear sign of overfitting: the model is becoming overly specialized to the training data at the expense of generalization.
+
+Several techniques are commonly employed to combat overfitting. methods add a penalty term to the loss function based on the magnitude of the network's weights (e.g., L1 or L2 regularization) or introduce randomness during training. is a popular regularization technique that randomly sets a fraction of neuron activations to zero during each training update, preventing the network from becoming too reliant on any specific neurons or pathways. involves monitoring the validation loss (or another validation metric) and stopping the training process when this metric ceases to improve or starts to worsen, even if the training loss is still decreasing. This prevents the model from entering the overfitting regime. artificially increases the size and diversity of the training dataset by applying random transformations (e.g., rotations, flips, color shifts for images; synonym replacement for text) to existing samples. This exposes the model to more variations, encouraging it to learn more robust features. by reducing the number of layers or units can decrease its capacity, making it less prone to fitting noise, though this must be balanced against the risk of underfitting (where the model is too simple to capture the underlying patterns). Finally, techniques like , while primarily used for evaluation and hyperparameter tuning, also give a better indication of generalization performance than a single train-validation split, indirectly helping in the selection of models that are less overfitted.
+
+There exists a model architecture for every possible application of a NN, like image classification, sentiment analysis, text generation, etc. In the following sections, we will delve into two of the most common ones: Autoencoders (Section ) and Transformers (Section ). Other most common architectures will be given in Section , as they are not building blocks for the Chapter .
+
+Autoencoders (AEs) represent a class of NNs primarily utilized for unsupervised learning paradigms. In such settings, the learning objective is intrinsically defined by the structure within the data itself, rather than relying on explicit target labels Goodfellow2016. The fundamental goal of an AE is to learn a compressed, lower-dimensional latent representation of the input data, from which the original input can be subsequently reconstructed with minimal information loss. This process effectively learns a non-linear projection onto a potentially lower-dimensional manifold capturing the principal factors of variation within the data distribution.
+
+An archetypal autoencoder comprises two main components: an encoder network and a decoder network.
+
+The , denoted by a function \( f_ \), maps an input vector \( x X \) (typically \( X = R^d \)) to a latent representation \( z Z \) (typically \( Z = R^k \) with \( k d \)). This mapping is parameterized by \( \):
+\[ z = f_(x) \]
+The aim of this encoding process is to break down the most prominent features of the input into a compact representation, thereby reducing dimensionality or extracting features.
+
+The , denoted by a function \( g_ \), maps the latent representation \( z \) back to the original input space \( X \), producing a reconstruction \( x \). This mapping is parameterized by \( \):
+\[ x = g_(z) \]
+Thus, the autoencoder seeks to learn parameters \( \) and \( \) that approximate the identity function through the composition \( g_ f_ \). The learning objective is typically formulated as minimizing a reconstruction loss function \( L(x, x) \) averaged over the data distribution \( p_data(x) \):
+\[ _, E_x p_data(x) [L(x, g_(f_(x)))] \]
+For continuous data, the Mean Squared Error (MSE) is commonly employed:
+\[ L_MSE(x, x) = \| x - x \|_2^2 = 1d _i=1^d (x_i - x_i)^2 \]
+where \( d \) is the dimensionality of the input vector \( x \). For binary data, the Binary Cross-Entropy (BCE) loss is often more appropriate.
+
+Variational Autoencoders (VAEs) Kingma2013AutoEncodingVB, Rezende2014 extend the standard AE framework by introducing a probabilistic perspective, framing the autoencoder within the context of latent variable models and variational inference. Instead of mapping the input \( x \) to a single point \( z \) in the latent space, the VAE encoder learns a mapping to the parameters of a probability distribution over the latent space.
+
+Specifically, the encoder, often called the \( q_(z|x) \), typically outputs the parameters of a diagonal Gaussian distribution: the mean vector \( _(x) \) and the log-variance vector \( (_^2(x)) \).
+\[ _(x), (_^2(x)) = f_(x) \]
+A latent vector \( z \) is then sampled from this approximate posterior distribution:
+\[ z q_(z|x) = N(z | _(x), diag(_^2(x))) \]
+The decoder, which we call the \( p_(x|z) \), then reconstructs the input \( x \) from the sampled latent vector \( z \):
+\[ x p_(x|z) \]
+where \( p_(x|z) \) is often modeled as a Gaussian \( N(x | g_(z), ^2 I) \) (leading to an MSE-like reconstruction term) or a Bernoulli distribution (leading to a BCE-like term).
+
+Training a VAE involves maximizing the Evidence Lower Bound (ELBO) on the marginal log-likelihood \( p(x) \), which is equivalent to minimizing the negative ELBO:
+\[ L_VAE(, ; x) = -E_z q_(z|x)[ p_(x|z)] + D_KL(q_(z|x) \| p(z)) \]
+The first term represents the expected negative log-likelihood, acting as the reconstruction loss. The second term is the Kullback-Leibler (KL) divergence between the approximate posterior \( q_(z|x) \) and a prior distribution over the latent variables \( p(z) \), typically chosen as a standard multivariate Gaussian \( N(0, I) \). This KL divergence acts as a regularization term, encouraging the learned latent distributions to resemble the prior. A weighting factor \( \) is often introduced to balance the two terms Higgins2017betaVAE, particularly for disentanglement purposes:
+\[ L_VAE = L_reconstruction + L_KL \]
+
+Autoencoders, through their capacity to learn meaningful data representations, find utility across diverse machine learning applications, despite not being optimized for a singular discriminative or predictive task. Key applications include:
+
+Dimensionality Reduction
+The encoder \( f_ \) provides a mapping to a lower-dimensional latent space \( Z \), offering a potentially non-linear alternative to methods like Principal Component Analysis (PCA) for data visualization or compact representation.
+
+Feature Learning
+The learned latent representations \( z = f_(x) \) or \( z_q(x) \) can serve as input features for subsequent supervised learning tasks, such as classification or regression, potentially improving performance by capturing essential data characteristics.
+
+Anomaly Detection
+Trained predominantly on nominal data, autoencoders typically exhibit higher reconstruction errors \( L(x, x) \) when presented with inputs \( x \) that deviate significantly from the learned data manifold. This property allows for their use in detecting outliers or anomalies.
+
+Generative Modeling
+Probabilistic variants like VAEs excel as generative models. New data samples resembling the training distribution can be synthesized by sampling from the latent prior distribution \( p(z) \) (for VAEs), and subsequently passing these samples through the decoder network \( g_ \).
+
+Another very popular type of NN are attention-based networks, at the base of the Transformer () architecture. Transformers are particularly useful in Natural Language Processing (NLP) tasks, especially since the emergence of Large Language Models (LLMs) in recent years. They demonstrated State of the Art capabilities in language understanding, text generation, and complex problem solving.
+
+Attention mechanisms have emerged as the biggest breakthrough in deep learning, particularly for processing sequential data such as natural language, speech, and time-series. Originally introduced in to enhance encoder-decoder architectures in tasks like machine translation, it was later reformalized by VaswaniSPUJGKP17. Attention allows models to dynamically focus on relevant parts of the input sequence, addressing the limitations of fixed-size representations.
+The intuition behind is derived from classical linear networks (like MLP ) by learning weight matrices . If we think each of the weight matrix's row as a selector for the input's linear combinations, then the attention mechanism computes a learned, data-dependent, weighted selection these linear combinations of the input. The latter is first encoded into a matrix , similarly to linear networks, and then a weight matrix refines it into a selection of important features. The weight matrix is constructed by first creating "queries" of the inputs, encoded into a matrix , and matching those queries against a database of keys to compute a score value. Those keys, encoded from the input into a matrix , compute of the inputs into a matrix . Those scores are then mapped to probabilities using the activation (see ), which we call the weight matrix.
+
+This mechanism thus aim to refine the feature selection to be more data-driven and context dependent. More formally, if we define the input , being the sequence length and the embedding size of the data, then the self-attention (cf. section below) matrices , , and are defined as follow :
+\[
+Q = X W_Q, K = X W_K, V = X W_V
+\]
+where \( W_Q, W_K, W_V R^d d_k \) are learned projections. The formula for the full attention mechanism is thus given by:
+\[
+Attention(Q, K, V) = softmax(QK^Td_k) V
+\]
+
+where the scaling term has been introduced to prevent large magnitudes, ensuring stable gradients in softmax. 
+
+This is the most straightforward one, the key-value matrix pair is computed from the previous hidden states, as well as the query matrix, and as described in .
+
+We also differentiate from . Contrary to self-attention, cross-attention computes the key-value pair from the encoder's output, and use the precedent decoder's hidden layer to compute the queries. It is particularly useful in the setting where we are decoding the next datapoint from a encoded sequence, and the decoder's architecture uses the learned representation of the encoder (cf. section ). The difference also lies in the dimension of matrices and , which now has dimension ( being the dimension of the encoder).
+
+Another architecture change that improves the capture of diverse relationships it the Multi-Head Attention (MHA). Multiple attention mechanisms run in parallel sourcing from the same hidden layer, and each capturing there own semantic relationship of the data. For each of the heads, we have 
+\[
+head_i = Attention(Q W_Q_i, K W_K_i, V W_V_i)
+\]
+
+where \( W_Q_i, W_K_i, W_V_i R^d d_k \). The final output is:
+\[
+MultiHead(Q, K, V) = Concat(head_1, , head_h) W_O
+\]
+
+with \( W_O R^h d_k d \) allowing to map back into the hidden layer's original dimension.
+
+One last building block for the Transformer architecture is the masking, which is more generally called . The usual technique makes sort that no weight is put on forward lookups by elements of the sequence. For example, in a sentence, the words at its beginning has an effect on the end of the sentence, but the words at the end can't have an effect on those from the beginning. This is represented in the attention weights by setting the upper-triangle part of the matrix to s. In general, other type of intervention can be done in the attention weights, in order to enforce no relations at all (setting an entry to 0) or strong relation to only one point/a set of points.
+
+The transformer architecture was introduced by VaswaniSPUJGKP17 as a state-of-the-art method for machine translation. It heavily relies on the attention mechanism, combining self and cross attention, MHA and causal attention. It is structured as an encoder-decoder, each consisting of sequential attention layers: One MHA followed by a FFN. Each step also applies normalization LayerNorm of the data and residual skip connections he2016deep, techniques used to improve gradient computations. Cross-attention and masking is applied in the decoder part of the transformer, where we first input the targets' into a masked MHA, feeding the outputted hidden layer to the next MHA's query, while its key-value pair is computed from the encoder's output. Finally, the resulting attention is passed through a FFN then into the next attention layer. More formally, for the encoder, we have:
+\[
+aligned
+h_1 &= LayerNorm(x + MHA(x, x, x)) \\
+h_2 &= LayerNorm(h_1 + FFN(h_1))
+aligned
+\]
+where is the input to the encoder, and for the decoder we have:
+\[
+aligned
+h_1 &= LayerNorm(y + MaskedMHA(y, y, y)) \\
+h_2 &= LayerNorm(h_1 + MHA(h_1, h_enc, h_enc)) \\
+h_3 &= LayerNorm(h_2 + FFN(h_2))
+aligned
+\]
+where is the input to the decoder, is the masked MHA, and is the output from the encoder. (and consequently ) takes as input, in the order, the query, the key, and the value matrices.
+
+The advent of the transformer architecture have been majorly influenced by Large Language Models (LLMs), a class of deep learning models built on top of the attention mechanism and specialized in NLP tasks.
+
+LLMs architecture tweaked a bit the classical transformer's architecture, by namely skipping the encoding part. Indeed, as each text input must first be embedded into a vector -- i.e. a numerical representation allowing computations -- this sort of acts as an encoder. We call this part the of the data and each fragment of text is thus called a , corresponding to one element of the sequence. For example, the current sentence's is shown in Figure . The embedded tokens are then learned to be decoded in a self-masked-multi-head-attention setting.
+
+While FFNs (cf. Section ), AEs and VAEs (cf. Section ), and the Transformer architecture (cf. Section ) represent foundational and highly successful NN paradigms, the field encompasses a broader range of specialized architectures. This section briefly discusses three prominent examples: Convolutional Neural Networks (CNNs), primarily used for grid-like data such as images; Recurrent Neural Networks (RNNs), designed for sequential data; and Diffusion Models, a powerful class of modern generative models. 
+
+ homma1987convolution are a class of deep NNs particularly effective for processing data with a known grid-like topology, such as images. Their architecture is inspired by the organization of the animal visual cortex and designed to automatically and adaptively learn spatial hierarchies of features, from low-level edges and textures to high-level concepts.
+
+The core of CNNs is the convolutional layer, which applies a convolution operation to the input, passing the result through a non-linear activation function. Unlike fully connected layers, convolutional layers leverage parameter sharing and local connectivity.
+
+Local Connectivity and Weight Sharing Instead of connecting every input neuron to every output neuron, each output neuron in a convolutional layer is connected only to a small region of the input volume, known as the . Furthermore, all neurons in a single output feature map share the same set of weights (the or ). This dramatically reduces the number of parameters compared to a fully connected network and makes the model somewhat invariant to the location of features in the input.
+
+Mathematical Formulation Consider a 2D input volume (e.g., a grayscale image or a feature map from a previous layer) denoted by . A convolutional layer applies a set of filters, where each filter (with ) slides across the input. The convolution operation (*) for a single filter at spatial location in the output feature map is defined as:
+
+where is a bias term associated with filter , is the dictating the step size of the filter across the input, and is the amount of zero-padding applied to the input borders (often used to control the spatial dimensions of the output). The indices must be handled carefully at the boundaries, especially considering padding. For multi-channel inputs , each filter becomes a volume , and the summation extends over the input channels as well, producing an output , where and depend on . The full output volume comprises the feature maps from all filters.
+
+Another important component of many CNN architectures is the pooling layer. Its function is to progressively reduce the spatial size of the representation, reducing the amount of parameters and computation in the network, and also helping to make the learned features more robust to small translations and distortions.
+
+Common pooling operations include max pooling and average pooling. A pooling layer operates independently on each feature map slice of the input activations . It partitions the feature map into non-overlapping (or sometimes overlapping) rectangular regions and, for each region, outputs a single value.
+For max pooling with a pooling region of size and stride , the output is:
+
+Average pooling computes the arithmetic mean instead of the maximum over the region.
+
+ RumelhartHintonWilliams1985 are designed to operate on sequential data, such as time series or natural language. Unlike FFNs (cf. Section ), RNNs possess connections that form directed cycles, allowing them to maintain an internal state or "memory" that captures information about previous elements in the sequence.
+
+The core idea of an RNN is to apply the same set of weights recursively over the elements of a sequence. At each time step , the network receives an input and the hidden state from the previous time step. It computes the new hidden state and, optionally, an output .
+
+Mathematical Formulation The basic RNN update rules are:
+
+Here, , , and are weight matrices, and , are bias vectors. These parameters are shared across all time steps. is typically a non-linear activation function like or , while depends on the task (e.g., for classification at each step). The initial hidden state is often initialized to a zero vector.
+
+RNNs are typically trained using Backpropagation Through Time (BPTT), which involves unrolling the network over the sequence length and applying standard backpropagation.
+
+Vanishing and Exploding Gradients A major challenge in training simple RNNs is the vanishing or exploding gradient problem. Due to the repeated multiplication by the recurrent weight matrix during backpropagation, gradients can either shrink exponentially towards zero (vanishing) or grow exponentially large (exploding) as they propagate back through time. This makes it difficult for standard RNNs to learn long-range dependencies in sequences.
+
+Advanced Architectures To mitigate these issues, more sophisticated RNN variants like Long Short-Term Memory (LSTM) networks and Gated Recurrent Units (GRUs) were developed. These architectures incorporate gating mechanisms that learn to control the flow of information, allowing them to selectively remember or forget information over longer time scales and significantly improving their ability to capture long-range dependencies.
+
+To address the difficulties simple RNNs face in learning long-range dependencies, primarily due to the vanishing and exploding gradient problems, more sophisticated recurrent architectures were developed. Among the most successful and widely adopted is the Long Short-Term Memory (LSTM) network hochreiter1997long. LSTMs introduce a more complex internal structure designed to regulate the flow of information through time via specialized gating mechanisms.
+
+Cell State and Gating Mechanisms The main innovation of LSTM is the introduction of a , , which acts as an information superhighway, allowing information to flow through the sequence with minimal distortion. The flow of information into and out of the cell state, as well as the generation of the hidden state , is controlled by three primary gates: the forget gate, the input gate, and the output gate. Each gate uses a sigmoid activation function, , which outputs values between 0 and 1, indicating how much of each component of information should be let through.
+
+Forget Gate () This gate decides what information to discard from the previous cell state . It looks at the previous hidden state and the current input :
+
+Here, denotes the concatenation of the vectors and . and are the weight matrix and bias vector for the forget gate, respectively.
+
+Input Gate () and Candidate Values () This gate determines what new information will be stored in the cell state. It consists of two parts: first, the input gate layer decides which values to update, and second, a layer creates a vector of new candidate values, , that could be added to the state.
+
+ and are the parameters for the input gate and candidate value layers.
+
+Cell State Update The previous cell state is updated to the new cell state . The old state is multiplied element-wise () by the forget gate (forgetting things), and then the product of the input gate and the candidate values is added (adding new information).
+
+Output Gate () and Hidden State () Finally, the output gate decides what parts of the cell state will be output. The cell state is passed through (pushing values to be between -1 and 1) and then multiplied element-wise by the output of the sigmoid gate . This result is the new hidden state .
+
+ are the parameters for the output gate. The hidden state is then used for predictions, and is also fed back into the LSTM unit at the next time step.
+
+Information Flow Control The gating mechanisms, combined with the additive interaction for the cell state update, allow LSTMs to learn long-term dependencies. By setting gates appropriately (close to 0 or 1), the network can choose to remember information over many time steps (if ) or forget past information and incorporate new inputs. This structure provides a more stable path for gradients during backpropagation compared to simple RNNs, significantly mitigating the vanishing gradient problem.
+
+Diffusion models, specifically ho2020denoising, represent a powerful class of generative models that have recently achieved state-of-the-art results in generating high-fidelity data, particularly images. They operate by systematically destroying structure in data through a forward diffusion process and then learning a reverse denoising process to generate data from noise.
+
+The forward process gradually adds Gaussian noise to a data sample drawn from the true data distribution over a sequence of time steps. This is typically defined as a Markov chain where the noise added at each step is controlled by a variance schedule , with .
+
+A useful property of this process is that we can sample directly from in closed form. Let and . Then:
+
+As , if the schedule and are chosen appropriately, becomes approximately distributed according to a standard Gaussian distribution , effectively destroying all information about the original data sample .
+
+The generative process involves reversing the diffusion. Starting from pure noise , the model learns to iteratively denoise the sample to produce a data point . This reverse process is also modeled as a Markov chain , parameterized by a NN .
+
+If are small, the true reverse conditional is also Gaussian. The goal is to train the network to approximate this true conditional. The variance is often fixed (e.g., or where ), while the network learns the mean .
+
+Instead of directly predicting , it is common practice to reparameterize the network to predict the noise that was added at step , denoted . Using the relationship , where , the mean can be expressed in terms of the predicted noise. A simplified training objective, derived from the variational lower bound on the data log-likelihood, often involves minimizing the mean squared error between the true noise and the predicted noise:
+
+The NN , often implemented using architectures like U-Nets which are adept at image-to-image tasks, takes the noisy data and the time step as input and outputs a prediction of the noise component. During generation, one samples and iteratively samples for to obtain the final sample .
+
+Bio-statistics frequently confronts questions extending beyond mere association towards establishing causal relationships. Determining whether a new drug improved patient outcomes, or if an environmental exposure an increased risk of disease, necessitates a framework distinct from standard correlational analysis. While randomized controlled trials (RCTs) provide a gold standard by balancing confounders through randomization, much bio-statistical data originates from observational studies where treatments or exposures are not assigned randomly. This prevalence of observational data underscores the critical need for robust causal inference methodologies capable of addressing inherent biases.
+
+Before formalizing causal concepts, we revisit essential statistical inference tools. Hypothesis testing provides a framework for evaluating evidence against a specific claim. We typically formulate a (), often representing no effect or no difference (e.g., the drug has no effect), and an () representing the presence of an effect. A test statistic, calculated from sample data, quantifies the discrepancy between the observed data and . The resulting is the probability of observing a test statistic at least as extreme as the one computed, assuming is true. If the p-value falls below a pre-specified significance level (commonly 0.05), we reject . This process carries risks: a (probability ) occurs when rejecting a true , while a (probability ) occurs when failing to reject a false .
+
+While hypothesis testing asks an effect exists, estimation quantifies its . A , , provides a single best guess for a population parameter (e.g., the difference in mean recovery times) based on the sample. However, it lacks a measure of uncertainty. A (CI), typically expressed as , provides a range of plausible values for the true parameter, calculated from the data, with a specified confidence level (e.g., 95\
+
+The ability of a study to detect a true effect, if one exists, is its , defined as . Adequate power (often targeted at 80\
+
+The Potential Outcomes framework, also known as the Neyman-Rubin Causal Model (RCM) neyman-rubin-model, provides a formal language for defining causal effects. Consider a simple scenario with a binary treatment (where denotes treatment and denotes control/no treatment) and an outcome . For each individual unit in the population, we define two : , the outcome that had individual received the treatment (), and , the outcome that had individual received the control ().
+
+The (ITE) for unit is the difference between their potential outcomes: . This represents the true causal effect of the treatment specifically for that individual. However, the is that we can only observe one potential outcome for each individual. The observed outcome can be written as . If individual received the treatment (), we observe but remains unobserved (counterfactual). Conversely, if , we observe but is counterfactual.
+
+Since ITEs are typically unobservable, causal inference often focuses on estimating average causal effects at the population level. The primary target is often the (ATE), defined as the expected difference in potential outcomes across the entire population:
+\[ ATE = E[Y(1) - Y(0)] = E[Y(1)] - E[Y(0)] \]
+The ATE represents the average effect of assigning the entire population to treatment versus control. Another relevant quantity is the (ATT), defined as .
+
+A fundamental principle is that . In observational studies, a naive comparison of outcomes between treated and untreated groups, , generally does not equal the ATE, . This discrepancy arises because the groups receiving and may differ systematically in ways other than the treatment itself.
+
+The most critical challenge is . A confounder is a variable associated with both the treatment and the outcome (potentially through separate paths not mediated by 's effect on ). For example, if physicians preferentially prescribe a new drug () to sicker patients, and sicker patients () naturally have worse outcomes (), then is a confounder. Failing to account for leads to . The naive comparison captures both the true causal effect and the bias introduced by the baseline differences between groups:
+\[ E[Y|A=1] - E[Y|A=0] = ATE + E[Y(0)|A=1] - E[Y(0)|A=0]_Bias Term \]
+(assuming homogeneous treatment effect for simplicity, otherwise ATE is replaced by ATT and the bias term involves as well). If is randomly assigned (as in an ideal RCT), then is independent of the potential outcomes, , making the bias term zero on average.
+
+Another significant challenge is . This occurs when the selection of individuals into the study or analysis sample is related to both the exposure/treatment and the outcome, leading to a distorted estimate. Examples include differential loss-to-follow-up, where patient dropout is related to both treatment assignment and prognosis, or the healthy worker effect, where occupational cohorts are inherently healthier than the general population, biasing mortality comparisons. Conditioning on a (a variable caused by both and , or factors related to them) can also induce spurious associations and bias. Addressing confounding and selection bias is paramount for drawing valid causal conclusions from observational data.
+
+Structural Causal Models (SCMs), as described in Pearl2009, provide a formal framework for encoding causal assumptions. An SCM consists of a set of endogenous variables , a set of exogenous (unmeasured) variables , and a set of functions such that each is determined by its function and corresponding exogenous variable: , where are the endogenous parents (direct causes) of . The exogenous variables represent stochasticity or unmodelled factors.
+
+Directed Acyclic Graphs (DAGs) are often used to visualize the causal relationships assumed in an SCM, omitting the exogenous variables for clarity (assuming they are independent). The nodes represent the variables (e.g., ), and the directed edges represent direct causal effects ( implies is a direct cause of relative to the other variables in ). means there are no directed paths starting and ending at the same node, reflecting the assumption that a variable cannot cause itself.
+
+DAGs are powerful tools for making causal assumptions explicit. For instance, confounding between and by is represented as . They allow researchers to reason about conditional independencies implied by the causal structure. Furthermore, graphical criteria, such as the Pearl2009, can be applied to a DAG to determine if a causal effect (like the ATE) is from the observed data distribution. Identifiability means the causal quantity can be expressed purely in terms of the observational distribution . For example, if a set of covariates satisfies the back-door criterion relative to , it implies conditional ignorability (), allowing the ATE to be estimated via adjustment: . SCMs and DAGs thus provide the formal language and graphical tools necessary to define causal questions and assess the possibility of answering them from available data.
+
+The challenges inherent in estimating causal effects from observational data, particularly confounding and selection bias (Section ), motivate the development of advanced statistical methodologies. Traditional parametric models (e.g., linear or logistic regression) often impose strong, potentially incorrect assumptions about functional forms, leading to biased estimates if misspecified. Conversely, while modern ML excels at flexible prediction, standard ML algorithms are typically optimized for predictive accuracy () rather than for estimating a specific causal parameter . They may lack mechanisms for bias reduction specific to the causal target and often do not readily provide valid statistical inference (e.g., confidence intervals). The Targeted Learning (TL) framework provides a principled approach to bridge this gap, leveraging ML's flexibility while ensuring robust and efficient estimation of causal parameters.
+
+The core idea of Targeted Learning van_der_laan_rose_2018 is to formulate causal estimation as a problem of estimating a parameter of the true data-generating distribution , where is a statistical model representing our assumptions about . TL advocates for using large, realistic statistical models (often nonparametric or semiparametric) that minimize untestable assumptions. The TL roadmap involves a two-stage procedure.
+
+First, : Relevant features of that are necessary for estimating , but not the target itself, are estimated. For the ATE, , key nuisance parameters are the conditional outcome expectation and the treatment mechanism (propensity score) (or just for binary ). TL encourages using flexible, data-adaptive methods for this stage. The algorithm vanderLaan2007 is often employed, which uses cross-validation to find the optimal convex combination of predictions from a diverse library of candidate ML algorithms (e.g., GLMs, random forests, gradient boosting), yielding an asymptotically optimal estimator for the nuisance function under certain conditions. Let and denote these initial estimates based on a sample of size .
+
+Second, : The initial estimate, typically , is updated to a new estimate in a way that specifically targets the parameter . This "targeting" or "fluctuation" step aims to reduce bias for while minimally impacting the fit to the data elsewhere. The update is constructed to ensure the final estimator , where is the distribution implied by the targeted nuisance estimates, solves the estimating equation. This step is crucial for achieving the desirable properties of double robustness and efficiency.
+
+Two foundational principles guide the TL framework. Firstly, the must be clearly and formally defined based on the scientific question. This definition dictates the entire estimation procedure. Secondly, the estimation occurs within a chosen , which codifies assumptions about . The goal is to find an efficient and robust estimator for within , respecting these assumptions while leveraging data as much as possible.
+
+Targeted Maximum Likelihood Estimation (TMLE) provides a general template for implementing the TL roadmap. We illustrate it for estimating the ATE, , assuming observed data where .
+
+: Obtain initial estimates for and for . These can be derived using any suitable method, preferably Super Learner for flexibility vanderLaan2007, van_der_laan_rose_2018. For simplicity, we denote and .
+
+: Construct the "clever covariate", which is related to the part of the EIC involving the treatment mechanism:
+\[ H_n(A,W) = I(A=1)g^0_n(W) - I(A=0)1-g^0_n(W) \]
+Define a parametric working model (fluctuation model) that fluctuates the initial estimate along a path indexed by a parameter . This is often done using a logistic regression model for binary or a linear regression model for continuous , treating or as an offset:
+\[ logit(P_(Y=1|A,W)) = logit(Q^0_n(A,W)) + H_n(A,W) (for binary Y) \]
+\[ E_[Y|A,W] = Q^0_n(A,W) + H_n(A,W) (for continuous Y) \]
+
+: Estimate by fitting this parametric model to the observed data using Maximum Likelihood Estimation (MLE). This yields . This MLE step originally gave TMLE its nameAlthough the literature sometimes refer to TMLE as , it was initially introduced in reference to the MLE in vanderLaanRubin2006. The name comes from vanDerLaan2013TargetedLearning, where the fluctuation alongside the clever covariate is redefined as an optimization problem, thus loss-based..
+
+: Update the initial estimate using the fitted fluctuation parameter:
+\[ logit(Q^*_n(A,W)) = logit(Q^0_n(A,W)) + _n H_n(A,W) (for binary Y) \]
+\[ Q^*_n(A,W) = Q^0_n(A,W) + _n H_n(A,W) (for continuous Y) \]
+This is the targeted estimate of the conditional outcome expectation.
+
+: Calculate the plug-in estimate of the ATE using the targeted outcome regression estimate, averaging over the empirical distribution of :
+\[ _TMLE = 1n _i=1^n [Q^*_n(1, W_i) - Q^*_n(0, W_i)] \]
+
+: Inference is based on the estimated EIC. For the ATE, the EIC at is:
+\[ D^*(O; Q_0, g_0) = H_0(A,W)(Y - Q_0(A,W)) + Q_0(1,W) - Q_0(0,W) - _0 \]
+where uses the true . TMLE is constructed such that the empirical mean of the estimated EIC is approximately zero: . The variance of the TMLE estimator can be estimated as the sample variance of the estimated EIC values, divided by :
+\[ ^2_TMLE = 1n Var(D^*(O; Q^*_n, g^0_n)) = 1n^2 _i=1^n [D^*(O_i; Q^*_n, g^0_n)]^2 \]
+(assuming the EIC mean is zero). A _TMLE_0Q^0_nQ_0g^0_ng_0P_n D^* 0g^0_n_TMLEQ^*_nQ_0Q^0_nQ^*_n(Y - Q^*_n(A,W))g^0_nQ^0_ng^0_n_TMLEMP_0_0A_tW_tY_tW_tA_tY_t+kA_<tQ_t(A_t, W_t) = E[Y_final|A_t, W_t]g_t(A_t|A_t-1, W_t)V W_0,V = E[Y(1) - Y(0) | V]MMA, M, WA, WQgWiW_ih_i = A_i/g^0_n(W_i) - (1-A_i)/(1-g^0_n(W_i))_IPW = 1n_i h_i Y_ig_0(W)Q_0(A,W) = E_0[Y|A,W]A=1A=0W_iQ^0_n_Gcomp = 1n_i [Q^0_n(1, W_i) - Q^0_n(0, W_i)]Q_0(A,W)g^0_n(W_i)A=1A=0g_0(W)Q_0g_0g^0_nQ^0_n_0g(x) = P(A=1|W)Q(x) = E[Y|A=a, W]g(w; )Q(w; )WA_tL_tQ_k(H_k, A_k) = E[Y | H_k, A_k]g_k(A_k | H_k)H_k = (L_k, A_k-1)kH_k(x) = E[Y(1) - Y(0) | X=x](X)(X) = f(X; _)h_1h_0_1(x) = h_1((x); _1)_0(x) = h_0((x); _0)(x) = _1(x) - _0(x)h_e(X)e(x) = (h_e((x); _e))(X): X ZX(X)Z(X)Y(a) A | (X)a \0, 1\0 < P(A=1 | (X) = z) < 1(X) _ _e R_e(w ) + \|_w|w=1.0 R_e(w )\|^2(X)D[\, P((X)|A=1) \, , \, P((X)|A=0) \,]D(X)P(A=1|(X))(X)(X)ATE = E_(X)[E[Y|A=1, (X)] - E[Y|A=0, (X)]]fl\x_i\\h^(l)_i\lh^(l)_i = f^(l)(x_i)f^(l)l\x_i\\y_i\y_ifgh^(l)_iy_igy_iy_ih^(l)_igy_ih^(l)_iylyh^(l)yfyf_encf_dech^(l)lfh^(l) f_dec(f_enc(h^(l)))z = f_enc(h^(l))zh^(l)fh^(l) R^dz R^kk dz_jh^(l)_enc, _decz = f_enc(h^(l))>0h^(l)lf_encf_decf_FFNz = f_enc(h^(l))zh^(l)f_FFN(h^(l))z = f_enc(h^(l))_1h^(l) f_MLP(h^(l))h^(l)x_basex_sourceh^(l)h^(l)_baseh^(l)_sourceh^(l)_sourceff_>ll+1y_base = f(x_base) = f_>l(f^(l)(x_base))y_patched = f_>l(h^(l)_source)y_patchedy_baselx_sourcex_basex_baselk > llx_sourcex_baselh^(l)_baseh^(l)_sourcek h^(k) = h^(k)_patched - h^(k)_base h^(k)lkfxhyM_HLU, V, W, (h)VfM_HLdo(V=v)M_HLfhh(h)V=vf_patchedf_patchedM_HLdo(V=v)M_HLVZXVZXM_HLfLG_HL = (V_HL, E_HL)V_HLE_HL: V_HL P(V_LL)V_LLx_basev V_LLh_v(x_base)h'_vh'_vx_resampleh'_v = h_v(x_resample)vx_resampleG_HLvu V_HLv (u)uG_HLPa_HL(u)vG_HLx_resamplef_scrubbed(x_base)G_HLG_HLDE_x D[L(f_scrubbed(x))]E_x D[L(f(x))] L = E_x D[L(f_scrubbed(x))] - E_x D[L(f(x))]G_HL L 0G_HLff(x)xf_CPML_factual = E_x D [d(f_CPM(x), f(x))]dfx'f(x')(x', f(x'))z_CPM = _CPM(x)do(concept=c)f_CPM(_CPM(z'_CPM))z'_CPM_CPML_counterfactualL_CPM = L_factual + L_counterfactualfG_causalX = \X_1, ..., X_p\YG_causalxh = f_l(x)lG_causalX_irr XhYX_relx_sourceX_irrxX_relh_source = f_l(x_source)h_sourcexy = f_>l(h_source)L_IITy = f(x)yL_IIT = E_x, x_source [d(y, y)]L_total = L_task + L_IITL_taskL_totalfhX_irrX_relG_causalP_0P_0P_0P_0f_Q,gY_Q E[Y|A, W]P_g P(A = 1|W)W_1 = W_critW_1f_Q,gW R^10h_shared(W)Y_Q = f_Q(h_shared(W), A)P_g = (f_g(h_shared(W)))L = w_q L_MSE(Y, Y_Q) + w_g L_BCE(A, P_g)f_probe(h^(l)_shared) W_1lR^2N_W1W_1N_W1 MSE_Q BCE_g_TMLEf_Q,gW_1R^2W_1R^2R^2W_1W_1f_Q,gf_Q,giiijf_Q,gf_Q,gf_Q,gf_Q,g$ model trained on DS1 (strong confounder). This reveals which inputs tend to utilize similar downstream computational pathways.
+
+Combined visualizations overlay pathways for specific input pairs. Figure overlays traces for two input neurons identified as having high overlap (e.g., based on Figure ). Green nodes represent neurons activated in both pathways, indicating shared processing resources. Conversely, Figure overlays traces for a low-overlap pair, illustrating how the network routes information from these inputs through largely separate internal pathways. These visualizations provide insights into how the network potentially segregates or integrates information from different input sources, confounders versus other.
+
+This thesis explored the application of MI techniques, traditionally developed for large AI models, to NNs utilized within causal inference frameworks, and in particularly TMLE, in bio-statistics. Bridging the gap between the predictive power of NNs and the critical need for transparency in bio-statistical analysis, we investigated whether MI tools could elucidate the internal workings of these models in causal settings.
+
+Our experiments demonstrated that MI techniques offer valuable insights. We successfully employed methods like probing and ablation to validate NN-based nuisance function estimators, effectively identifying internal representations of confounders and confirming their causal relevance to model predictions and the final ATE estimate. Furthermore, causal tracing proved effective in discovering and visualizing the distinct computational pathways within NNs, revealing how information from different input covariates, such as confounders versus treatment variables, is processed and segregated or integrated by the network.
+
+These findings indicate that MI is not only feasible but also beneficial for enhancing the trustworthiness and understanding of NNs in bio-statistical causality. It provides methods for validating learned representations against domain knowledge, debugging model behavior, and potentially uncovering how models handle complex variable relationships.
+
+However, significant challenges and opportunities for future research remain. The inherent complexity of biological systems and the representations learned by NNs necessitate further development in MI techniques, particularly in robustly mapping low-level activations to high-level causal concepts (causal abstraction). Formalizing the integration of MI findings, such as insights from pathway analysis or causal scrubbing, directly into statistical inference procedures like refining TMLE estimates or quantifying model robustness, presents a crucial next step. Continued research, fostering collaboration between MI experts and bio-statisticians, is essential to develop tailored interpretability methods that advance both fields and promote the responsible use of sophisticated AI in high-stakes scientific discovery.

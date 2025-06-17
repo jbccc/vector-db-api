@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stackai-takehome"
+version = "0.1.0"
+description = "StackAI Takehome assignment - coding a search engine from scratch using FastAPI and Pydantic."
+readme = "README.md"
+requires-python = ">=3.13.1"
+license = {text = "MIT"}
+authors = [
+    {name = "Jean-Baptiste Conan", email = "[mon prenom].[mon nom].[mes initiales]@gmail.com"}
+]
+keywords = ["fastapi", "search", "vector-db", "semantic-search", "ai"]
+
+dependencies = [
+    "fastapi>=0.115.0",
+    "pydantic>=2.11.0",
+    "pydantic-settings>=2.9.0",
+    "uvicorn>=0.34.0",
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.0",
+    "numpy>=1.26.0",
+    "cohere>=5.15.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.0",
+    "httpx>=0.25.0",
+    "sqlalchemy-utils>=0.41.0",
+]
+lint = [
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+stackai-server = "app.main:app"
