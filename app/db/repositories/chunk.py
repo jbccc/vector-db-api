@@ -12,7 +12,6 @@ class Chunk(BaseModel):
     __tablename__ = "chunks"
 
     content = Column(String, nullable=False)
-    metadata_ = Column("metadata", String, nullable=True)
     document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id"))
     document = relationship("Document", back_populates="chunks")
     sequence_number = Column(Integer, nullable=False, comment="Position in document")

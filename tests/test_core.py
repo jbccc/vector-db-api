@@ -112,7 +112,6 @@ def test_lsh_index() -> None:
             "Vector not retrieve. It might be because LSH is not exact."
         )
 
-    # Test removal
     index.remove_vector("1")
     results_after_removal = index.search(query_vec, top_k=1)
     if results_after_removal:

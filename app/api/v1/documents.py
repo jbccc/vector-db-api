@@ -97,10 +97,8 @@ async def update_document(
 
     To re-index after updating, use /vector-db/index endpoint.
     """
-    # Validate library exists
     library_service.get_library(library_id)
 
-    # Update document
     update_data = payload.model_dump(exclude_unset=True)
     return document_service.update_document(document_id, update_data)
 
@@ -112,13 +110,13 @@ async def delete_document(
     library_service: LibraryServiceDep,
     document_service: DocumentServiceDep,
     chunk_service: ChunkServiceDep,
+    vector_db_service: VectorDBServiceDep,
 ) -> None:
     """Delete a document and all its chunks from both DB and vector index."""
     library_service.get_library(library_id)
-    document_service.get_document(document_id)
-    document_service.delete_document(document_id)
+    vector_db_service.delete_document_index(document_id)
     chunk_service.delete_document_chunks(document_id)
-
+    document_service.delete_document(document_id)
 
 # CHUNK ACCESS IS READ-ONLY
 @router.get("/{document_id}/chunks")
